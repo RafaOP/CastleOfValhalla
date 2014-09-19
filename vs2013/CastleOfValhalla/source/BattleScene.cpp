@@ -27,13 +27,14 @@ bool BattleScene::Init()
 	dragging = false;
 
 	tower = new GameObject();
-	Texture *t = uthRS.LoadTexture("tower.tga");
+	Texture *t = uthRS.LoadTexture("tower.png");
 	tower->AddComponent(new Sprite(t));
 	tower->transform.SetScale(0.2f);
 
 	timeCount = 0;
 	zoomLevel = 1;
 	selected = nullptr;
+	lastStatPos = uthEngine.GetWindowResolution() / 2;
 
 	return true;
 }
@@ -46,7 +47,7 @@ bool BattleScene::Update(float dt)
 	if (timeCount - 1 >= 0)
 	{
 		NPC *enemy = new NPC();
-		uth::Texture *t = uthRS.LoadTexture("warrior.tga");
+		uth::Texture *t = uthRS.LoadTexture("warrior.png");
 		enemy->AddComponent(new uth::Sprite(t));
 		enemy->transform.SetScale(0.06f);
 		int side = (Randomizer::GetFloat(-1, 1) > 0 ? 1 : -1);
@@ -125,7 +126,6 @@ void BattleScene::OnDrag()
 		//WriteLog("DRAG           X: %f, Y: %f\n", pos.x, pos.y);
 		//pmath::Vec2 cpos = uthEngine.GetWindow().GetCamera().GetPosition();
 		//WriteLog("X%f Y%f\n", cpos.x, cpos.y);
-		WriteLog("CAM%f RES%f\n", uthEngine.GetWindow().GetCamera().GetPosition().x, uthEngine.GetWindowResolution().x);
 		if (!(uthEngine.GetWindow().GetCamera().GetPosition().x <= -uthEngine.GetWindowResolution().x / (6 / zoomLevel)))
 			if (pos.x < 0) uthEngine.GetWindow().GetCamera().Scroll(pos.x, 0);	// I can move left whenever the camera is not all to the left
 		if (!(uthEngine.GetWindow().GetCamera().GetPosition().y <= -uthEngine.GetWindowResolution().x / (6 / zoomLevel)))

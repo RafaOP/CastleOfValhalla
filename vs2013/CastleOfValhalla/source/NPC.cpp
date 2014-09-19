@@ -29,6 +29,13 @@ int   NPC::getLevel()      { return level; }
 float NPC::TakeDamage(float attack)
 {
 	health = (getHealth() - attack) / (9 + level);
+	if (health <= 0)
+	{
+		setBaseAttack(0);
+		setAttackRate(0);
+		setSpawnRate(0);
+	}
+
 	return getHealth();
 }
 
