@@ -1,4 +1,7 @@
 #include "../include/BattleScene.h"
+#include "../include/Orc.h"
+#include "../include/Berserker.h"
+#include <math.h>
 
 #include <UtH/UtHEngine.hpp>
 #include <UtH/Engine/Sprite.hpp>
@@ -6,8 +9,6 @@
 #include <UtH/Platform/Input.hpp>
 #include <UtH/Core/Randomizer.hpp>
 using namespace uth;
-
-#include <math.h>
 
 #ifdef UTH_SYSTEM_WINDOWS
 #include <Windows.h>
@@ -31,44 +32,52 @@ bool BattleScene::Init()
 	tower->AddComponent(new Sprite(t));
 	tower->transform.SetScale(0.2f);
 
-	timeCount = 0;
 	zoomLevel = 1;
 	selected = nullptr;
 	lastStatPos = uthEngine.GetWindowResolution() / 2;
 
+	// Set the barracks in the armies
+	// Player barrack with 5 berserkers
+	Barrack* b = new Barrack();
+	b->setSoldierType(BERSERKER);
+	b->setModelNPC(new Berserker());
+	playerArmy.addBarrack(b, 5);
+
+	float npcPos = 0 - 128 * 2;
+	for (auto& i : playerArmy.getSoldiers())
+	{
+		i->transform.SetPosition(npcPos, i->transform.GetPosition().y);
+		npcPos += 128;
+	}
+
+	for (auto& i : playerArmy.getSoldiers())
+	{
+		pmath::Vec2 p = i->transform.GetPosition();
+		std::cout << "Base health is " << i->getBaseHealth() << std::endl;
+	}
+
+	// Enemy barrack with 5 orcs
+	b = new Barrack();
+	b->setSoldierType(ORC);
+	b->setModelNPC(new Orc());
+	enemyArmy.addBarrack(b, 5);
+	
+	npcPos = -uthEngine.GetWindowResolution().x / 2;
+	for (auto& i : enemyArmy.getSoldiers())
+	{
+		i->transform.SetPosition(npcPos, i->transform.GetPosition().y);
+		npcPos -= 128;
+	}
+
 	return true;
 }
+
 bool BattleScene::DeInit() { delete tower; return true; }
 
 bool BattleScene::Update(float dt)
 {
-	timeCount += dt;
-
-	if (timeCount - 1 >= 0)
-	{
-		NPC *enemy = new NPC();
-		uth::Texture *t = uthRS.LoadTexture("warrior.png");
-		enemy->AddComponent(new uth::Sprite(t));
-		enemy->transform.SetScale(0.06f);
-		int side = (Randomizer::GetFloat(-1, 1) > 0 ? 1 : -1);
-		enemy->transform.SetPosition(uthEngine.GetWindowResolution().x / 2 * side, 216.8 - enemy->transform.GetSize().y * 0.03f);
-		enemies.push_back(enemy);
-		
-		timeCount = 0;
-	}
-
-	std::vector<NPC*>::iterator it = enemies.begin();
-	
-	while (it != enemies.end())
-	{
-		pmath::Vec2 pos = (*it)->transform.GetPosition();
-		if (pos.x <= 5.f && pos.x >= -5.f) it = enemies.erase(it);
-		else
-		{
-			(*it)->transform.SetPosition(pos.x + (pos.x < -5.f ? 2.f : (pos.x > 5.f ? -2.f : 0)), pos.y);
-			++it;
-		}
-	}
+	playerArmy.Update(dt, enemyArmy);
+	enemyArmy.Update(dt, playerArmy);
 
 	if (uthInput.Common.Event() == uth::InputEvent::NONE) { dragging = false; }
 	if (uthInput.Common.Event() == uth::InputEvent::STATIONARY) { if (!dragging) lastStatPos = uthInput.Common.Position(); }
@@ -79,13 +88,13 @@ bool BattleScene::Update(float dt)
 
 	return true;
 }
+
 bool BattleScene::Draw()
 {
 	uthEngine.GetWindow().Clear();
 	tower->Draw(uthEngine.GetWindow());
-
-	for (std::vector<NPC*>::iterator it = enemies.begin(); it != enemies.end(); ++it)
-		(*it)->Draw(uthEngine.GetWindow());
+	enemyArmy.Draw(uthEngine.GetWindow());
+	playerArmy.Draw(uthEngine.GetWindow());
 
 	return true;
 }
@@ -112,7 +121,6 @@ void BattleScene::OnDrag()
 		pos.y = ceil(pos.y / 64) * 64;
 		tower->transform.SetPosition(pos);
 	}
-	// else selected = nullptr;
 
 	// If there's nothing selected, then move the camera
 	if (!selected)
@@ -123,9 +131,6 @@ void BattleScene::OnDrag()
 		pos = pos.normalize() * 4;
 		// X is positive when moving right
 		// Y is positive when moving down
-		//WriteLog("DRAG           X: %f, Y: %f\n", pos.x, pos.y);
-		//pmath::Vec2 cpos = uthEngine.GetWindow().GetCamera().GetPosition();
-		//WriteLog("X%f Y%f\n", cpos.x, cpos.y);
 		if (!(uthEngine.GetWindow().GetCamera().GetPosition().x <= -uthEngine.GetWindowResolution().x / (6 / zoomLevel)))
 			if (pos.x < 0) uthEngine.GetWindow().GetCamera().Scroll(pos.x, 0);	// I can move left whenever the camera is not all to the left
 		if (!(uthEngine.GetWindow().GetCamera().GetPosition().y <= -uthEngine.GetWindowResolution().x / (6 / zoomLevel)))
@@ -165,11 +170,10 @@ bool BattleScene::IsContained(pmath::Vec2 pos, GameObject& obj)
 	return bounds.contains(pos);
 }
 
+// Select objects in the scene
+// Ps.: soldiers don't count as objects
 uth::GameObject* BattleScene::ContainsObject(pmath::Vec2 pos)
 {
-	for (auto& i: enemies)
-		if (IsContained(pos, *i))
-			{ WriteLog("SOLDIER SELECTED\n"); return i; }
 	if (IsContained(pos, *tower)) { WriteLog("TOWER SELECTED\n"); return tower; }
 
 	return nullptr;

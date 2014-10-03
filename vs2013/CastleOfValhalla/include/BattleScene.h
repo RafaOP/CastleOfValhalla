@@ -5,15 +5,18 @@
 #include <queue>
 #include <UtH/UtHEngine.hpp>
 #include "NPC.h"
+#include "Army.h"
 
 class BattleScene : public uth::Scene
 {
 	private:
 		uth::Shader m_shader;
 		uth::GameObject* tower;
-		std::vector<NPC*> enemies;
+
+		Army enemyArmy;
+		Army playerArmy;
+
 		uth::GameObject* selected;
-		float timeCount;
 		float zoomLevel;
 
 		pmath::Vec2 lastStatPos;		// Last stationary touch position, change whenever there's a STATIONARY event after a NONE event

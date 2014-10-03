@@ -45,12 +45,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\ext\include;$(SolutionDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Build\Win32\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(SolutionDir)..\Build\Win32\Debug\UtHEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -69,14 +73,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Archer.h" />
+    <ClInclude Include="include\Army.h" />
+    <ClInclude Include="include\Arrow.h" />
     <ClInclude Include="include\BattleScene.h" />
+    <ClInclude Include="include\Berserker.h" />
+    <ClInclude Include="include\Barrack.h" />
+    <ClInclude Include="include\MoveAffector.hpp" />
     <ClInclude Include="include\NPC.h" />
+    <ClInclude Include="include\Orc.h" />
     <ClInclude Include="include\Scenes.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Archer.cpp" />
+    <ClCompile Include="source\Army.cpp" />
+    <ClCompile Include="source\Arrow.cpp" />
     <ClCompile Include="source\BattleScene.cpp" />
+    <ClCompile Include="source\Berserker.cpp" />
+    <ClCompile Include="source\Barrack.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\NPC.cpp" />
+    <ClCompile Include="source\Orc.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

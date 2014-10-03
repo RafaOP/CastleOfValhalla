@@ -1,14 +1,13 @@
 #pragma once
 #include "NPC.h"
-
-class Archer : public NPC
+class Orc : public NPC
 {
 private:
 
 public:
-	Archer();
-	Archer(const NPC& archer);
-	~Archer();
+	Orc();
+	Orc(const NPC& orc);
+	~Orc();
 
 	void Update(float dt, Army& enemyArmy);
 };

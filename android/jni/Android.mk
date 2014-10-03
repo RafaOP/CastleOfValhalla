@@ -30,11 +30,18 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := uthengine
 LOCAL_SRC_FILES := main.cpp \
-../../vs2013/TestProject/source/TestScene.cpp
+../../vs2013/TestProject/source/Archer.cpp \
+../../vs2013/TestProject/source/Army.cpp \
+../../vs2013/TestProject/source/Arrow.cpp \
+../../vs2013/TestProject/source/Barrack.cpp \
+../../vs2013/TestProject/source/BattleScene.cpp \
+../../vs2013/TestProject/source/Berserker.cpp \
+../../vs2013/TestProject/source/NPC.cpp \
+../../vs2013/TestProject/source/Orc.cpp
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue engine
 LOCAL_SHARED_LIBRARIES :=
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../vs2013/TestProject/include/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../vs2013/CastleOfValhalla/include/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../include/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../ext/include/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../ext/include/freetype_include/
