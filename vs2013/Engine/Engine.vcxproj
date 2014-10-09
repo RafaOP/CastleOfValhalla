@@ -160,7 +160,6 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\include\;$(SolutionDir)..\ext\include\;$(SolutionDir)..\ext\include\freetype_include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,9 +169,6 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\ext\lib\freetype\lib\Win32;$(SolutionDir)..\ext\lib\freetype-gl\lib\Win32;$(SolutionDir)..\ext\lib\Box2D\lib\Win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>Box2D-d.lib;freetype253_D.lib;freetype-gl-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

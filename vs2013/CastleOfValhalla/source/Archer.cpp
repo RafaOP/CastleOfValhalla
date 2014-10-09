@@ -1,41 +1,17 @@
 #include "../include/Archer.h"
 
-#include <UtH/UtHEngine.hpp>
-#include <UtH/Engine/Sprite.hpp>
 
 Archer::Archer()
 {
-	/*uth::Texture* t = uthRS.LoadTexture("archer.png");
-	AddComponent(new uth::Sprite(t));
-	transform.SetScale(0.02f);*/
+	setAttack(15); //level 1 arher is 10 * setAttack = 150
+	setHealth(20); //level 1 arher is 10 * setHealth = 200
+	setSpawnRate(0.1);
+	setAttackRate(0.2);
+	setSpeed(3);
 
-	attack = 3;
-	health = 100;
-	attackRate = 3;
-	xRange = 256;
-	yRange = 256;
-	speed = 0;
-	level = 1;
-
-	cost = 10;
-	direction = 0;
-
-	attackTimer = 0;
-	target = nullptr;
 }
 
-Archer::Archer(const NPC& archer) : NPC(archer)
-{
-	/*uth::Texture* t = uthRS.LoadTexture("archer.png");
-	AddComponent(new uth::Sprite(t));
-	transform.SetScale(0.02f);*/
-}
 
 Archer::~Archer()
-{
-}
-
-// Stands in position attacking everything that comes to it's range
-void Archer::Update(float dt, Army& enemyArmy)
 {
 }
